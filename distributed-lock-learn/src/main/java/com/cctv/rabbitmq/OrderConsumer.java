@@ -17,7 +17,6 @@ public class OrderConsumer {
   @Autowired
   private RabbitTemplate rabbitTemplate;
 
-
   public void consumerOrderPayTest() {
     Message receive = rabbitTemplate.receive("order.pay");
     if (receive != null) {
