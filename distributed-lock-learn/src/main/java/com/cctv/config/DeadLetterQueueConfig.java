@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2022/4/25 13:04
  */
 @Configuration
-public class DeadLetterQueue {
+public class DeadLetterQueueConfig {
 
   /**
    * 申明队列的时候 给绑定一个 扇形死信交换机

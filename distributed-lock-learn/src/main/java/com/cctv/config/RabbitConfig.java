@@ -21,6 +21,12 @@ public class RabbitConfig {
     RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
     //开启Mandatory 才能触发回调函数 无论消息结果怎样都强制回调
     //强制性的; 强制的
+    /*
+     * 当mandatory标志位设置为true时
+     * 如果exchange根据自身类型和消息routingKey无法找到一个合适的queue存储消息
+     * 那么broker会调用basic.return方法将消息返还给生产者
+     * 当mandatory设置为false时，出现上述情况broker会直接将消息丢弃
+     */
     rabbitTemplate.setMandatory(true);
     //到交换机的情况
     rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {

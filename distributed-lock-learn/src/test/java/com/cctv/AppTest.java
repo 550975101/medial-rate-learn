@@ -3,8 +3,15 @@ package com.cctv;
 
 import com.cctv.rabbitmq.OrderConsumer;
 import com.cctv.rabbitmq.OrderProvider;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -47,7 +54,6 @@ public class AppTest {
 
   @Test
   public void consumerTest() {
-    orderConsumer.consumerOrderPayTest();
   }
 
   @Test
@@ -164,6 +170,8 @@ public class AppTest {
   @Test
   public void test30() {
     ConnectionFactory connectionFactory = rabbitTemplate.getConnectionFactory();
+    Connection connection = connectionFactory.createConnection();
+    Channel channel = connection.createChannel(true);
     RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
     Map<String, Object> params = new HashMap<>();
     params.put("x-expires", 60000);
@@ -176,12 +184,19 @@ public class AppTest {
 
   @Test
   public void test31() {
-    rabbitTemplate.convertAndSend("", "deadLetterQueue", "auto.expire" );
+    rabbitTemplate.convertAndSend("", "deadLetterQueue", "auto.expire");
   }
 
   @Test
   public void test32() {
-    rabbitTemplate.convertAndSend("", "deadLetterQueueTwo", "auto.expire" );
+    rabbitTemplate.convertAndSend("delayExchangeOne", "delayed.www", "message 10000", new MessagePostProcessor() {
+      @Override
+      public Message postProcessMessage(Message message) throws AmqpException {
+        message.getMessageProperties().setDelay(10000);
+        return message;
+      }
+    });
+
   }
 }
 
