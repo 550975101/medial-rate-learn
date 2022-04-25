@@ -1,0 +1,39 @@
+server:
+  port: 55001
+spring:
+  application:
+    name: distributed-lock-learn
+  config:
+    activate:
+      on-profile: dev
+  rabbitmq:
+    #addresses:  集群地址配置：指定client连接到的server的地址，多个以逗号分隔(优先取addresses，然后再取host)
+    host: 10.6.4.30
+    port: 5672
+    username: sakura
+    password: sakura
+    virtual-host: sakura
+    # 确认消息发送至交换机
+    publisher-confirm-type: correlated
+    # 确认消息发送到队列
+    publisher-returns: true
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@10.6.10.57:1521/xshdb
+    username: cdpdev
+    password: 123456
+  redis:
+    timeout: 60000
+    password: 123123
+    sentinel:
+      master: xredismaster
+      nodes: 10.6.4.227:26379,10.6.4.232:26379,10.6.4.239:26379
+    jedis:
+      pool:
+        max-active: 1024
+        max-wait: 10000
+        max-idle: 200
+        min-idle: 5
+
+
