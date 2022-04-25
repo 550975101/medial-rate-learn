@@ -4,6 +4,7 @@ package com.cctv;
 import com.cctv.rabbitmq.OrderConsumer;
 import com.cctv.rabbitmq.OrderProvider;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -76,5 +77,43 @@ public class AppTest {
   @Test
   public void publishMessageExistsQueue() {
       orderProvider.publishMessage("hell word");
+  }
+
+
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
+
+  @Test
+  public void test22() {
+    rabbitTemplate.convertAndSend("fanoutExchange",null,"fanout message");
+  }
+
+  @Test
+  public void test23() {
+    rabbitTemplate.convertAndSend("directExchange","directQueueTwo","direct message");
+  }
+
+  /**
+   * 这个是 topic.queue.one  、topic.queue.two  会收到
+   */
+  @Test
+  public void test24() {
+    rabbitTemplate.convertAndSend("topicExchange","topic.queue.one","topic message");
+  }
+
+  /**
+   * 这个是  topic.queue.two   topic.queue.four 会收到
+   */
+  @Test
+  public void test25() {
+    rabbitTemplate.convertAndSend("topicExchange","topic.renyi","topic message");
+  }
+
+  /**
+   * 这个是  topic.queue.two   topic.queue.four 会收到
+   */
+  @Test
+  public void test26() {
+    rabbitTemplate.convertAndSend("topicExchange","topic.renyi","topic message");
   }
 }
