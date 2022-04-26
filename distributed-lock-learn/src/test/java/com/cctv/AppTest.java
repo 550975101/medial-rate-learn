@@ -184,7 +184,7 @@ public class AppTest {
 
   @Test
   public void test31() {
-    rabbitTemplate.convertAndSend("", "deadLetterQueue", "auto.expire");
+    rabbitTemplate.convertAndSend("", "noPersistentQueue", "auto.expire");
   }
 
   @Test

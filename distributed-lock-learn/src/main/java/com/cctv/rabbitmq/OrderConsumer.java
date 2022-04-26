@@ -21,7 +21,7 @@ public class OrderConsumer {
   @Autowired
   private RabbitTemplate rabbitTemplate;
 
-  @RabbitListener(queues = "order.pay")
+  //@RabbitListener(queues = "order.pay")
   public void consumerOrderPayTest(Message message, Channel channel) {
     System.out.println(new String(message.getBody()));
     try {
@@ -37,4 +37,6 @@ public class OrderConsumer {
       System.out.println(new String(receive.getBody()));
     }
   }
+
+
 }
